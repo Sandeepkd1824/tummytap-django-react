@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.log
+
+# Django
+*.pot
+*.pyc
+db.sqlite3
+media/
+staticfiles/
+.env
+
+# VSCode / IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Poetry
+poetry.lock
+# Uncomment this if you want to ignore the virtualenv created by Poetry inside the project
+# .venv/
