@@ -26,6 +26,7 @@ class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
 
+
 class JWTLoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
@@ -46,5 +47,9 @@ class JWTLoginSerializer(serializers.Serializer):
         return {
             "refresh": str(refresh),
             "access": str(refresh.access_token),
-            "email": user.email,
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                # "name": user.name,
+            },
         }

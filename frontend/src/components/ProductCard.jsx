@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -6,6 +6,13 @@ import axios from 'axios';
 const ProductCard = ({ product }) => {
   const colors = useTheme();
   const token = localStorage.getItem('access_token');
+  const userId = localStorage.getItem('user_id');
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    // Optionally preload favorite state (if you have that info already in product)
+    setIsFavorite(product.is_favorite || false);
+  }, [product]);
 
   const addToCart = async () => {
     try {
@@ -28,23 +35,27 @@ const ProductCard = ({ product }) => {
     }
   };
 
-  const addToFavorite = async () => {
+  const toggleFavorite = async () => {
     try {
-      await axios.post(
-        'http://localhost:8000/api/products/favorites/',
-        {
-          product: product.id,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      toast.success(`${product.name} added to favorites`);
+      if (!isFavorite) {
+        await axios.post(
+          'http://localhost:8000/api/products/favorites/',
+          { product: product.id , user: userId,},
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        toast.success(`${product.name} added to favorites`);
+        setIsFavorite(true);
+      } else {
+        await axios.delete(
+          `http://localhost:8000/api/products/favorites/${product.id}/`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        toast.info(`${product.name} removed from favorites`);
+        setIsFavorite(false);
+      }
     } catch (err) {
       console.error(err);
-      toast.error('Failed to add to favorites');
+      toast.error('Failed to update favorite');
     }
   };
 
@@ -72,6 +83,7 @@ const ProductCard = ({ product }) => {
       <h3 style={{ margin: '0.5rem 0', color: colors.primary }}>{product.name}</h3>
       <p style={{ color: colors.text }}>{product.description}</p>
       <p style={{ fontWeight: 'bold' }}>₹{product.price}</p>
+
       <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
         <button
           onClick={addToCart}
@@ -86,17 +98,20 @@ const ProductCard = ({ product }) => {
         >
           Add to Cart
         </button>
+
         <button
-          onClick={addToFavorite}
+          onClick={toggleFavorite}
           style={{
             flex: 1,
             padding: '0.5rem',
-            backgroundColor: '#eee',
+            backgroundColor: '#fff',
             border: '1px solid #ccc',
             borderRadius: '5px',
+            fontSize: '1.2rem',
+            color: isFavorite ? 'red' : 'black',
           }}
         >
-          ❤️
+          {isFavorite ? '❤️' : '🤍'}
         </button>
       </div>
     </div>

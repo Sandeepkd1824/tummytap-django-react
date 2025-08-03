@@ -21,6 +21,7 @@ const Login = () => {
 
       localStorage.setItem('access_token', res.data.access);
       localStorage.setItem('refresh_token', res.data.refresh);
+      localStorage.setItem('user_id', res.data.user.id);
 
       toast.success('Login successful!');
       navigate('/');
