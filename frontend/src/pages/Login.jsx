@@ -3,9 +3,11 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useTheme } from '../context/ThemeContext';
 
 const Login = () => {
   const navigate = useNavigate();
+  const colors = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -21,7 +23,7 @@ const Login = () => {
       localStorage.setItem('refresh_token', res.data.refresh);
 
       toast.success('Login successful!');
-      navigate('/'); // redirect to home page
+      navigate('/');
     } catch (err) {
       console.error(err);
       toast.error(err.response?.data?.detail || 'Login failed.');
@@ -29,31 +31,89 @@ const Login = () => {
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '400px', margin: 'auto' }}>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Email:</label><br />
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your email"
-            required
-          />
-        </div>
-        <div style={{ marginTop: '1rem' }}>
-          <label>Password:</label><br />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
-            required
-          />
-        </div>
-        <button type="submit" style={{ marginTop: '1rem' }}>Login</button>
-      </form>
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'flex-start',
+      minHeight: '100vh',
+      backgroundColor: colors.background,
+      padding: '2rem 1rem',
+    }}>
+      <div style={{
+        background: '#fff',
+        padding: '1.75rem',
+        borderRadius: '12px',
+        boxShadow: '0 0 10px rgba(0,0,0,0.08)',
+        width: '100%',
+        maxWidth: '400px',
+        boxSizing: 'border-box',
+        marginTop: '4rem',
+      }}>
+        <h2 style={{
+          marginBottom: '1.25rem',
+          color: colors.primary,
+          textAlign: 'center',
+          fontWeight: '600',
+          fontSize: '1.5rem'
+        }}>
+          Login to TummyTap
+        </h2>
+        <form onSubmit={handleLogin}>
+          <div style={{ marginBottom: '1rem' }}>
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.3rem' }}>
+              Email
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="Enter your email"
+              style={{
+                width: '100%',
+                padding: '0.65rem',
+                borderRadius: '8px',
+                border: '1px solid #ccc',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
+          <div style={{ marginBottom: '1.2rem' }}>
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.3rem' }}>
+              Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder="Enter your password"
+              style={{
+                width: '100%',
+                padding: '0.65rem',
+                borderRadius: '8px',
+                border: '1px solid #ccc',
+                boxSizing: 'border-box'
+              }}
+            />
+          </div>
+          <button type="submit" style={{
+            width: '100%',
+            padding: '0.75rem',
+            backgroundColor: colors.primary,
+            color: '#fff',
+            border: 'none',
+            borderRadius: '8px',
+            fontWeight: '600',
+            fontSize: '1rem',
+            cursor: 'pointer',
+            boxSizing: 'border-box',
+            marginTop: '0.5rem'
+          }}>
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

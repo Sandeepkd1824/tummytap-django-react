@@ -59,10 +59,16 @@ const ProductCard = ({ product }) => {
       }}
     >
       <img
-        src={product.image || 'https://via.placeholder.com/250'}
+        src={product.main_image || 'https://via.placeholder.com/250'}
         alt={product.name}
-        style={{ width: '100%', borderRadius: '8px' }}
+        style={{
+          width: '100%',
+          height: '200px',
+          objectFit: 'cover',
+          borderRadius: '8px',
+        }}
       />
+
       <h3 style={{ margin: '0.5rem 0', color: colors.primary }}>{product.name}</h3>
       <p style={{ color: colors.text }}>{product.description}</p>
       <p style={{ fontWeight: 'bold' }}>₹{product.price}</p>

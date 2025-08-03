@@ -1,4 +1,4 @@
-export const ACTIVE_THEME = 'ocean';
+export const ACTIVE_THEME = 'default'; // Change this to switch themes
 export const themes = {
   default: {
     primary: '#FF6B00',
@@ -39,32 +39,6 @@ export const themes = {
     info: '#2196F3',
     muted: '#6C757D'
   },
-    forest: {
-        primary: '#228B22',
-        secondary: '#6B8E23',
-        accent: '#8FBC8F',
-        text: '#FFFFFF',
-        background: '#2E8B57',
-        card: '#3CB371',
-        success: '#4CAF50',
-        warning: '#FFC107',
-        danger: '#F44336',
-        info: '#2196F3',
-        muted: '#6C757D'
-    },
-    desert: {
-        primary: '#EDC9AF',
-        secondary: '#D6A65B',
-        accent: '#C77D3A',
-        text: '#FFFFFF',
-        background: '#F5F5DC',
-        card: '#E8DAB8',
-        success: '#4CAF50',
-        warning: '#FFC107',
-        danger: '#F44336',
-        info: '#2196F3',
-        muted: '#6C757D'
-    },
     twilight: {
         primary: '#6A5ACD',
         secondary: '#7B68EE',
@@ -72,84 +46,6 @@ export const themes = {
         text: '#FFFFFF',
         background: '#483D8B',
         card: '#5F9EA0',
-        success: '#4CAF50',
-        warning: '#FFC107',
-        danger: '#F44336',
-        info: '#2196F3',
-        muted: '#6C757D'
-    },
-    autumn: {
-        primary: '#FF4500',
-        secondary: '#FF6347',
-        accent: '#FF8C00',
-        text: '#FFFFFF',
-        background: '#FFD700',
-        card: '#FFA07A',
-        success: '#4CAF50',
-        warning: '#FFC107',
-        danger: '#F44336',
-        info: '#2196F3',
-        muted: '#6C757D'
-    },
-    spring: {
-        primary: '#FF69B4',
-        secondary: '#FF1493',
-        accent: '#FFB6C1',
-        text: '#FFFFFF',
-        background: '#FFF0F5',
-        card: '#FF7F50',
-        success: '#4CAF50',
-        warning: '#FFC107',
-        danger: '#F44336',
-        info: '#2196F3',
-        muted: '#6C757D'
-    },
-    winter: {
-        primary: '#1E90FF',
-        secondary: '#00BFFF',
-        accent: '#87CEFA',
-        text: '#FFFFFF',
-        background: '#F0F8FF',
-        card: '#ADD8E6',
-        success: '#4CAF50',
-        warning: '#FFC107',
-        danger: '#F44336',
-        info: '#2196F3',
-        muted: '#6C757D'
-    },
-    neon: {
-        primary: '#39FF14',
-        secondary: '#FF073A',
-        accent: '#00FFFF',
-        text: '#000000',
-        background: '#FFFFFF',
-        card: '#F0F0F0',
-        success: '#4CAF50',
-        warning: '#FFC107',
-        danger: '#F44336',
-        info: '#2196F3',
-        muted: '#6C757D'
-    },
-    pastel: {
-        primary: '#FFB6C1',
-        secondary: '#FFDAB9',
-        accent: '#E6E6FA',
-        text: '#333333',
-        background: '#FFF0F5',
-        card: '#FFF5EE',
-        success: '#4CAF50',
-        warning: '#FFC107',
-        danger: '#F44336',
-        info: '#2196F3',
-        muted: '#6C757D'
-    },
-    cyberpunk: {
-        primary: '#00FF00',
-        secondary: '#FF00FF',
-        accent: '#FFFF00',
-        text: '#000000',
-        background: '#0F0F0F',
-        card: '#1A1A1A',
         success: '#4CAF50',
         warning: '#FFC107',
         danger: '#F44336',
@@ -403,32 +299,6 @@ export const themes = {
         info: '#2196F3',
         muted: '#6C757D'
     },
-    zen: {
-        primary: '#FFB6C1',
-        secondary: '#FFDAB9',
-        accent: '#E6E6FA',
-        text: '#333333',
-        background: '#FFF0F5',
-        card: '#FFF5EE',
-        success: '#4CAF50',
-        warning: '#FFC107',
-        danger: '#F44336',
-        info: '#2196F3',
-        muted: '#6C757D'
-    },
-    cosmicDark: {
-        primary: '#8A2BE2',
-        secondary: '#7B68EE',
-        accent: '#6A5ACD',
-        text: '#FFFFFF',
-        background: '#1C1C1C',
-        card: '#2E2E2E',
-        success: '#4CAF50',
-        warning: '#FFC107',
-        danger: '#F44336',
-        info: '#2196F3',
-        muted: '#6C757D'
-    }
 };
 
 export const colors = themes[ACTIVE_THEME];
