@@ -79,7 +79,8 @@ class ReviewSerializer(serializers.ModelSerializer):
 class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorite
-        fields = "__all__"
+        fields = ["id", "product", "user"]
+        read_only_fields = ["user"]
 
 
 class DietPlanSerializer(serializers.ModelSerializer):

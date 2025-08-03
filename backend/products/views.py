@@ -137,11 +137,20 @@ class FavoriteViewSet(viewsets.ModelViewSet):
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["product", "user"]
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        product = serializer.validated_data.get("product")
+        user = self.request.user
+
+        if Favorite.objects.filter(user=user, product=product).exists():
+            raise serializers.ValidationError(
+                "This product is already in your favorites."
+            )
+
+        serializer.save(user=user)
 
 
 class DietPlanViewSet(viewsets.ModelViewSet):

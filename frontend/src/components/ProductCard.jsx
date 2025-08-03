@@ -3,16 +3,17 @@ import { useTheme } from '../context/ThemeContext';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, favorites, refreshFavorites }) => {
   const colors = useTheme();
   const token = localStorage.getItem('access_token');
-  const userId = localStorage.getItem('user_id');
   const [isFavorite, setIsFavorite] = useState(false);
+  const [favoriteId, setFavoriteId] = useState(null);
 
   useEffect(() => {
-    // Optionally preload favorite state (if you have that info already in product)
-    setIsFavorite(product.is_favorite || false);
-  }, [product]);
+    const fav = favorites?.find((f) => f.product === product.id);
+    setIsFavorite(!!fav);
+    setFavoriteId(fav?.id || null);
+  }, [product, favorites]);
 
   const addToCart = async () => {
     try {
@@ -40,19 +41,18 @@ const ProductCard = ({ product }) => {
       if (!isFavorite) {
         await axios.post(
           'http://localhost:8000/api/products/favorites/',
-          { product: product.id , user: userId,},
+          { product: product.id },
           { headers: { Authorization: `Bearer ${token}` } }
         );
         toast.success(`${product.name} added to favorites`);
-        setIsFavorite(true);
-      } else {
+      } else if (favoriteId) {
         await axios.delete(
-          `http://localhost:8000/api/products/favorites/${product.id}/`,
+          `http://localhost:8000/api/products/favorites/${favoriteId}/`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         toast.info(`${product.name} removed from favorites`);
-        setIsFavorite(false);
       }
+      await refreshFavorites(); // Update parent favorite list
     } catch (err) {
       console.error(err);
       toast.error('Failed to update favorite');
