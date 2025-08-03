@@ -56,6 +56,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class CartItemSerializer(serializers.ModelSerializer):
     product_name = serializers.ReadOnlyField(source="product.name")
+    product_image = serializers.ImageField(source="product.main_image", read_only=True)
     product_price = serializers.ReadOnlyField(source="product.price")
 
     class Meta:
@@ -67,6 +68,7 @@ class CartItemSerializer(serializers.ModelSerializer):
             "product_price",
             "quantity",
             "added_at",
+            "product_image",
         ]
 
 
