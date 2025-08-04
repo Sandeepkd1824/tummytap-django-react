@@ -1,24 +1,16 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useCart } from '../context/CartContext';
 import logo from '../img/tplogo.png'; // Adjust the path as necessary
 const Navbar = () => {
   const colors = useTheme();
   const { cartItems } = useCart();
-  const navigate = useNavigate();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  
   const token = localStorage.getItem('access_token'); // adjust if using a different key
   const userName = localStorage.getItem('user_name'); // set this during login
   const isAuthenticated = !!token;
 
-  const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user_name');
-    navigate('/login');
-  };
+
 
   const navStyle = {
     backgroundColor: colors.primary,
@@ -37,24 +29,6 @@ const Navbar = () => {
     fontWeight: 'bold',
   };
 
-  const dropdownStyle = {
-    position: 'relative',
-    display: 'inline-block',
-    cursor: 'pointer',
-    marginRight: '1rem',
-  };
-
-  const dropdownMenuStyle = {
-    position: 'absolute',
-    top: '100%',
-    right: 0,
-    backgroundColor: '#fff',
-    color: '#000',
-    border: '1px solid #ccc',
-    padding: '0.5rem',
-    minWidth: '100px',
-    zIndex: 10,
-  };
 
   return (
     <nav style={navStyle}>
@@ -71,15 +45,8 @@ const Navbar = () => {
             <Link to="/register" style={linkStyle}>Register</Link>
           </>
         ) : (
-          <div style={dropdownStyle} onClick={() => setDropdownOpen(!dropdownOpen)}>
-            👤 {userName || 'User'}
-            {dropdownOpen && (
-              <div style={dropdownMenuStyle}>
-                <div onClick={handleLogout} style={{ cursor: 'pointer' }}>
-                  Logout
-                </div>
-              </div>
-            )}
+          <div>
+            <Link to="/profile" style={linkStyle}>{userName || 'User'}</Link>
           </div>
         )}
 

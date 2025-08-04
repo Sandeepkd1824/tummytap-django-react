@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Cart from './pages/Cart';
 import VerifyOtp from './pages/VerifyOTP';
 import Checkout from './pages/Checkout';
+import UserProfilePage from './pages/UserProfilePage';  
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Layout from './components/Layout';
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/profile" element={<UserProfilePage />} />
         </Routes>
       </Layout>
       <ToastContainer />
