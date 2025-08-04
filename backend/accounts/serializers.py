@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, EmailOTP
+from .models import CustomUser, EmailOTP, DeliveryAddress
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -50,6 +50,40 @@ class JWTLoginSerializer(serializers.Serializer):
             "user": {
                 "id": user.id,
                 "email": user.email,
-                # "name": user.name,
+                "name": user.name,
             },
         }
+
+class DeliveryAddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DeliveryAddress
+        fields = "__all__"
+        read_only_fields = ["user"]
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    addresses = DeliveryAddressSerializer(many=True)
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id",
+            "email",
+            "name",
+            "phone",
+            "primary_address",
+            "is_verified",
+            "date_joined",
+            "addresses",
+        ]
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = [
+            "name",
+            "phone",
+            "primary_address",
+        ]  # add more fields as needed
+        read_only_fields = ["email"]

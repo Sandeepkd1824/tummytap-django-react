@@ -4,10 +4,16 @@ from django.conf import settings
 from django.utils.crypto import get_random_string
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-
-from .models import CustomUser, EmailOTP
-from .serializers import RegisterSerializer, LoginSerializer, JWTLoginSerializer
+from rest_framework import status, permissions, viewsets, generics
+from .models import CustomUser, EmailOTP, DeliveryAddress
+from .serializers import (
+    RegisterSerializer,
+    LoginSerializer,
+    JWTLoginSerializer,
+    UserDetailSerializer,
+    DeliveryAddressSerializer,
+    UserUpdateSerializer,
+)
 
 
 def send_otp(email):
@@ -74,7 +80,7 @@ class LoginView(APIView):
             else:
                 return Response({"error": "Invalid credentials"}, status=401)
         return Response(serializer.errors, status=400)
-    
+
 class JWTLoginView(APIView):
     def post(self, request):
         serializer = JWTLoginSerializer(data=request.data)
@@ -83,39 +89,29 @@ class JWTLoginView(APIView):
         return Response(serializer.errors, status=401)
 
 
+class UserProfileView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        serializer = UserDetailSerializer(user)
+        return Response(serializer.data)
 
 
-# class VerifyLoginOTPView(APIView):
-#     def post(self, request):
-#         email = request.data.get("email")
-#         otp = request.data.get("otp")
+class UserUpdateView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserUpdateSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-#         try:
-#             otp_obj = EmailOTP.objects.filter(email=email, otp=otp).latest('created_at')
-#             if otp_obj.is_expired():
-#                 return Response({"error": "OTP expired"}, status=400)
-#         except EmailOTP.DoesNotExist:
-#             return Response({"error": "Invalid OTP"}, status=400)
+    def get_object(self):
+        return self.request.user
 
-#         user = get_user_model().objects.get(email=email)
-#         refresh = RefreshToken.for_user(user)
 
-#         otp_obj.delete()
+class DeliveryAddressViewSet(viewsets.ModelViewSet):
+    serializer_class = DeliveryAddressSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
-#         return Response({
-#             "refresh": str(refresh),
-#             "access": str(refresh.access_token),
-#         }, status=200)
+    def get_queryset(self):
+        return DeliveryAddress.objects.filter(user=self.request.user)
 
-# class SendOTPView(APIView):
-#     def post(self, request):
-#         email = request.data.get('email')
-#         if not email:
-#             return Response({"error": "Email is required"}, status=400)
-
-#         otp = generate_otp()
-#         send_otp_via_email(email, otp)
-
-#         EmailOTP.objects.create(email=email, otp=otp)
-
-#         return Response({"message": "OTP sent successfully"}, status=200)
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

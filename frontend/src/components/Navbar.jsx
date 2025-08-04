@@ -10,13 +10,13 @@ const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const token = localStorage.getItem('access_token'); // adjust if using a different key
-  const userName = localStorage.getItem('userName'); // set this during login
+  const userName = localStorage.getItem('user_name'); // set this during login
   const isAuthenticated = !!token;
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    localStorage.removeItem('userName');
+    localStorage.removeItem('user_name');
     navigate('/login');
   };
 
