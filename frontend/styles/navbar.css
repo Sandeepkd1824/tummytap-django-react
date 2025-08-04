@@ -1,0 +1,43 @@
+/* navbar.css */
+
+.navbar {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-link {
+    margin-right: 1rem;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navbar-dropdown {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin-right: 1rem;
+}
+
+.navbar-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    min-width: 100px;
+    z-index: 10;
+}

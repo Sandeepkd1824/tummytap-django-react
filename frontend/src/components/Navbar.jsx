@@ -2,20 +2,20 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 import { useCart } from '../context/CartContext';
-
+import logo from '../img/tplogo.png'; // Adjust the path as necessary
 const Navbar = () => {
   const colors = useTheme();
   const { cartItems } = useCart();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const token = localStorage.getItem('access'); // adjust if using a different key
+  const token = localStorage.getItem('access_token'); // adjust if using a different key
   const userName = localStorage.getItem('userName'); // set this during login
   const isAuthenticated = !!token;
 
   const handleLogout = () => {
-    localStorage.removeItem('access');
-    localStorage.removeItem('refresh');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
     localStorage.removeItem('userName');
     navigate('/login');
   };
@@ -23,7 +23,7 @@ const Navbar = () => {
   const navStyle = {
     backgroundColor: colors.primary,
     color: colors.background,
-    padding: '1rem',
+    padding: '5px',
     display: 'flex',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
@@ -58,7 +58,10 @@ const Navbar = () => {
 
   return (
     <nav style={navStyle}>
-      <div style={{ fontWeight: 'bold' }}>🍽️ TummyTap</div>
+      {/* <div style={{ fontWeight: 'bold' }}>🍽️ TummyTap</div> */}
+      <div>
+        <img src={logo} alt="TummyTap Logo" style={{ height: '50px' }} />
+      </div>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <Link to="/" style={linkStyle}>Home</Link>
 
