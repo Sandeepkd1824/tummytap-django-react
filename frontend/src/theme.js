@@ -122,7 +122,7 @@ export const themes = {
         secondary: '#696969',
         accent: '#808080',
         text: '#FFFFFF',
-        background: '#000000',
+        background: '#f6f1f1ff',
         card: '#1C1C1C',
         success: '#4CAF50',
         warning: '#FFC107',

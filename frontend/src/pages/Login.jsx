@@ -4,12 +4,15 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
   const colors = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -24,6 +27,7 @@ const Login = () => {
       localStorage.setItem('user_id', res.data.user.id);
       localStorage.setItem('user_name', res.data.user.name);
       console.log(res.data, 'Login response');
+      login( res.data.access, res.data.user.name)
       toast.success('Login successful!');
       navigate('/');
     } catch (err) {

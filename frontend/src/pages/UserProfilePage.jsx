@@ -1,15 +1,25 @@
 // pages/ProfilePage.jsx
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from '../utils/axiosInstance';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "../utils/axiosInstance";
+import { useAuth } from "../context/AuthContext";
+import { useApp } from "../context/AppContext";
 
-import DeliveryAddressList from '../components/user/DeliveryAddressList';
- const token = localStorage.getItem('access_token');
+import DeliveryAddressList from "../components/user/DeliveryAddressList";
+
 const ProfilePage = () => {
   const navigate = useNavigate();
   const [addresses, setAddresses] = useState([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const userName = localStorage.getItem('user_name');
+
+  const { logout, userToken: token, user: userName } = useAuth();
+  const { resetAllItemStates } = useApp();
+
+  useEffect(() => {
+    if (!addresses.length) {
+      loadAddresses();
+    }
+  }, []);
 
   const loadAddresses = async () => {
     try {
@@ -18,28 +28,24 @@ const ProfilePage = () => {
       });
       setAddresses(res.data);
     } catch (err) {
-      console.error('Error fetching addresses', err);
+      console.error("Error fetching addresses", err);
     }
   };
-
-  useEffect(() => {
-    loadAddresses();
-  }, []);
 
   const handleSave = async (formData) => {
     try {
       if (formData.id) {
         await axios.put(`/accounts/addresses/${formData.id}/`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+          headers: { Authorization: `Bearer ${token}` },
+        });
       } else {
-        await axios.post('/accounts/addresses/', formData, {
+        await axios.post("/accounts/addresses/", formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }
       loadAddresses();
     } catch (err) {
-      console.error('Save failed', err);
+      console.error("Save failed", err);
     }
   };
 
@@ -50,15 +56,14 @@ const ProfilePage = () => {
       });
       loadAddresses();
     } catch (err) {
-      console.error('Delete failed', err);
+      console.error("Delete failed", err);
     }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('user_name');
-    navigate('/login');
+    navigate("/login");
+    resetAllItemStates();
+    logout();
   };
 
   return (
@@ -70,7 +75,7 @@ const ProfilePage = () => {
             className="cursor-pointer"
             onClick={() => setDropdownOpen((prev) => !prev)}
           >
-            👤 {userName || 'User'}
+            👤 {userName || "User"}
           </div>
           {dropdownOpen && (
             <div className="absolute right-0 mt-2 bg-white border border-gray-300 shadow-md z-10 rounded px-4 py-2">

@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { useTheme } from '../context/ThemeContext';
-import { toast } from 'react-toastify';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import { useTheme } from "../context/ThemeContext";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext"; // Assuming you have an AuthContext for user authentication
+import { useApp } from "../context/AppContext"; // Assuming you have an AppContext for global app state
 
 const ProductCard = ({ product, favorites, refreshFavorites }) => {
   const colors = useTheme();
-  const token = localStorage.getItem('access_token');
   const [isFavorite, setIsFavorite] = useState(false);
   const [favoriteId, setFavoriteId] = useState(null);
+
+  const { userToken: token } = useAuth(); // Assuming you have a way to get the token from context
+  const { fetchCartItems } = useApp();
 
   useEffect(() => {
     const fav = favorites?.find((f) => f.product === product.id);
@@ -18,7 +22,7 @@ const ProductCard = ({ product, favorites, refreshFavorites }) => {
   const addToCart = async () => {
     try {
       await axios.post(
-        'http://localhost:8000/api/products/cart/',
+        "http://localhost:8000/api/products/cart/",
         {
           product: product.id,
           quantity: 1,
@@ -30,9 +34,10 @@ const ProductCard = ({ product, favorites, refreshFavorites }) => {
         }
       );
       toast.success(`${product.name} added to cart`);
+      fetchCartItems(); // Refresh cart items in the parent component
     } catch (err) {
       console.error(err);
-      toast.error('Failed to add to cart');
+      toast.error("Failed to add to cart");
     }
   };
 
@@ -40,7 +45,7 @@ const ProductCard = ({ product, favorites, refreshFavorites }) => {
     try {
       if (!isFavorite) {
         await axios.post(
-          'http://localhost:8000/api/products/favorites/',
+          "http://localhost:8000/api/products/favorites/",
           { product: product.id },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -55,7 +60,7 @@ const ProductCard = ({ product, favorites, refreshFavorites }) => {
       await refreshFavorites(); // Update parent favorite list
     } catch (err) {
       console.error(err);
-      toast.error('Failed to update favorite');
+      toast.error("Failed to update favorite");
     }
   };
 
@@ -63,37 +68,39 @@ const ProductCard = ({ product, favorites, refreshFavorites }) => {
     <div
       style={{
         border: `1px solid ${colors.primary}`,
-        borderRadius: '10px',
-        padding: '1rem',
-        backgroundColor: '#fff',
-        boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
+        borderRadius: "10px",
+        padding: "1rem",
+        backgroundColor: "#fff",
+        boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
       }}
     >
       <img
-        src={product.main_image || 'https://via.placeholder.com/250'}
+        src={product.main_image || "https://via.placeholder.com/250"}
         alt={product.name}
         style={{
-          width: '100%',
-          height: '200px',
-          objectFit: 'cover',
-          borderRadius: '8px',
+          width: "100%",
+          height: "200px",
+          objectFit: "cover",
+          borderRadius: "8px",
         }}
       />
 
-      <h3 style={{ margin: '0.5rem 0', color: colors.primary }}>{product.name}</h3>
+      <h3 style={{ margin: "0.5rem 0", color: colors.primary }}>
+        {product.name}
+      </h3>
       <p style={{ color: colors.text }}>{product.description}</p>
-      <p style={{ fontWeight: 'bold' }}>₹{product.price}</p>
+      <p style={{ fontWeight: "bold" }}>₹{product.price}</p>
 
-      <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
+      <div style={{ marginTop: "1rem", display: "flex", gap: "0.5rem" }}>
         <button
           onClick={addToCart}
           style={{
             flex: 1,
-            padding: '0.5rem',
+            padding: "0.5rem",
             backgroundColor: colors.primary,
-            color: '#fff',
-            border: 'none',
-            borderRadius: '5px',
+            color: "#fff",
+            border: "none",
+            borderRadius: "5px",
           }}
         >
           Add to Cart
@@ -103,15 +110,15 @@ const ProductCard = ({ product, favorites, refreshFavorites }) => {
           onClick={toggleFavorite}
           style={{
             flex: 1,
-            padding: '0.5rem',
-            backgroundColor: '#fff',
-            border: '1px solid #ccc',
-            borderRadius: '5px',
-            fontSize: '1.2rem',
-            color: isFavorite ? 'red' : 'black',
+            padding: "0.5rem",
+            backgroundColor: "#fff",
+            border: "1px solid #ccc",
+            borderRadius: "5px",
+            fontSize: "1.2rem",
+            color: isFavorite ? "red" : "black",
           }}
         >
-          {isFavorite ? '❤️' : '🤍'}
+          {isFavorite ? "❤️" : "🤍"}
         </button>
       </div>
     </div>
